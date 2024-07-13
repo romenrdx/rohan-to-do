@@ -1,13 +1,10 @@
 "use client";
-
 import React, { useState, ChangeEvent, KeyboardEvent } from "react";
-
 // Define the Todo interface
 export interface Todo {
   text: string;
   completed: boolean;
 }
-
 // The TodoList component
 const TodoList: React.FC = () => {
   // State for the list of todos
@@ -16,35 +13,30 @@ const TodoList: React.FC = () => {
   const [input, setInput] = useState<string>("");
   // State for the current filter
   const [filter, setFilter] = useState<string>("All");
-
   // Function to add a new todo
   const addTodo = () => {
     if (input.trim() === "") return;
     setTodos([...todos, { text: input, completed: false }]);
     setInput("");
   };
-
   // Handle pressing the Enter key to add a todo
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       addTodo();
     }
   };
-
   // Function to delete a todo
   const deleteTodo = (index: number) => {
     const newTodos = todos.filter((_, i) => i !== index);
     setTodos(newTodos);
   };
-
   // Function to toggle the completion status of a todo
-  const toggleTodo = (index: number) => {
+  const toggleTodo = (index: string) => {
     const newTodos = todos.map((todo, i) =>
-      i === index ? { ...todo, completed: !todo.completed } : todo
+      index === todo.text ? { ...todo, completed: !todo.completed } : todo
     );
     setTodos(newTodos);
   };
-
   // Function to get the todos based on the current filter
   const getFilteredTodos = () => {
     if (filter === "Active") {
@@ -55,7 +47,6 @@ const TodoList: React.FC = () => {
     }
     return todos;
   };
-
   return (
     <div className="container mx-auto p-4">
       {/* Title */}
@@ -104,7 +95,6 @@ const TodoList: React.FC = () => {
           placeholder="Add a new task inside 'All' category"
         />
       </div>
-
       {/* List of todos */}
       <ul className="absolute left-[270px] top-[170px]">
         {getFilteredTodos().map((todo, index) => (
@@ -116,7 +106,7 @@ const TodoList: React.FC = () => {
             <input
               type="checkbox"
               checked={todo.completed}
-              onChange={() => toggleTodo(index)}
+              onChange={() => toggleTodo(todo.text)}
               className="mr-2 w-[28px] bg-[#5A5A5A]"
             />
             {/* Todo text */}
@@ -153,5 +143,4 @@ const TodoList: React.FC = () => {
     </div>
   );
 };
-
 export default TodoList;
